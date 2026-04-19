@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Azzopardi Adaptive Climate System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #030a08;
+    --bg2:        #071210;
+    --bg3:        #0b1a17;
+    --green:      #00c875;
+    --green-dim:  #006a3a;
+    --green-glow: rgba(0,200,117,0.10);
+    --earth:      #8a6a3a;
+    --earth-dim:  #4a3a1a;
+    --earth-glow: rgba(138,106,58,0.10);
+    --sky:        #4ab8d4;
+    --sky-dim:    #1a5a6a;
+    --amber:      #e8a030;
+    --text:       #ccd9c8;
+    --text-dim:   #4a5a48;
+    --border:     rgba(0,200,117,0.15);
+    --border-e:   rgba(138,106,58,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ORGANIC TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(0,200,117,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(138,106,58,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(74,184,212,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px 120px;
+    z-index: 1;
+  }
+
+  /* HOME SVG */
+  .home-svg {
+    width: 160px;
+    height: 140px;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 0 20px rgba(0,200,117,0.3));
+    animation: home-breathe 5s ease infinite;
+  }
+
+  @keyframes home-breathe {
+    0%,100% { filter: drop-shadow(0 0 20px rgba(0,200,117,0.3)); }
+    50% { filter: drop-shadow(0 0 40px rgba(0,200,117,0.5)) drop-shadow(0 0 60px rgba(138,106,58,0.2)); }
+  }
+
+  .hero-byline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--green-dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 7vw, 72px);
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.0;
+    text-shadow: 0 0 60px rgba(0,200,117,0.3);
+    margin-bottom: 8px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .hero-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(13px, 2vw, 17px);
+    font-weight: 500;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+  }
+
+  .hero-sub span { color: var(--green); }
+
+  /* INTRO */
+  .hero-intro {
+    max-width: 680px;
+    font-size: clamp(17px, 2.5vw, 21px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.9;
+    margin-bottom: 50px;
+    padding: 30px 40px;
+    border-left: 2px solid var(--green-dim);
+    border-right: 2px solid var(--green-dim);
+    background: var(--green-glow);
+    text-align: left;
+  }
+
+  /* MODE PILLS */
+  .modes {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+
+  .mode {
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 160px;
+  }
+
+  .mode.hot {
+    background: rgba(232,160,48,0.08);
+    border: 1px solid rgba(232,160,48,0.3);
+  }
+
+  .mode.cold {
+    background: rgba(74,184,212,0.08);
+    border: 1px solid rgba(74,184,212,0.3);
+  }
+
+  .mode-icon { font-size: 28px; display: block; margin-bottom: 8px; }
+
+  .mode-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .mode.hot .mode-name { color: var(--amber); }
+  .mode.cold .mode-name { color: var(--sky); }
+
+  .mode-desc {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  .hero-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green-dim), transparent);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 5px;
+    animation: pulse 3s ease infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  /* SECTIONS */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 30px;
+  }
+
+  .section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--green-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-tag::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 40px;
+  }
+
+  .section-title span { color: var(--green); }
+  .section-title em { font-style: italic; font-weight: 300; }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* LAYER DIAGRAM */
+  .wall-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border-e);
+    margin: 40px 0;
+  }
+
+  .wall-layer {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+  }
+
+  .layer-label {
+    background: var(--bg3);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-right: 1px solid var(--border-e);
+  }
+
+  .layer-label.outer { color: var(--amber); }
+  .layer-label.middle { color: var(--earth); }
+  .layer-label.inner { color: var(--green); }
+
+  .layer-content {
+    background: var(--bg2);
+    padding: 20px 24px;
+  }
+
+  .layer-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .layer-title.outer { color: var(--amber); }
+  .layer-title.middle { color: var(--earth); }
+  .layer-title.inner { color: var(--green); }
+
+  .layer-content p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* SYSTEM CARDS */
+  .sys-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .sys-card {
+    background: var(--bg2);
+    padding: 32px 28px;
+  }
+
+  .sys-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+
+  .sys-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .sys-title.green { color: var(--green); }
+  .sys-title.earth { color: var(--earth); }
+  .sys-title.sky { color: var(--sky); }
+  .sys-title.amber { color: var(--amber); }
+
+  .sys-card p {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .sys-card p:last-child { margin-bottom: 0; }
+
+  /* MODE DETAIL BOXES */
+  .mode-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .mode-box {
+    padding: 36px 30px;
+  }
+
+  .mode-box.hot { background: rgba(232,160,48,0.05); }
+  .mode-box.cold { background: rgba(74,184,212,0.05); }
+
+  .mode-box-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mode-box.hot .mode-box-title { color: var(--amber); }
+  .mode-box.cold .mode-box-title { color: var(--sky); }
+
+  .mode-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .mode-step:last-child { border-bottom: none; }
+  .mode-step-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+  /* EARTH COUPLING */
+  .earth-box {
+    border: 1px solid var(--border-e);
+    background: var(--earth-glow);
+    padding: 40px;
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .earth-box::before {
+    content: '🌍';
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    padding: 0 16px;
+    font-size: 24px;
+  }
+
+  .earth-box-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--earth);
+    text-align: center;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .earth-box p {
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .earth-stats {
+    display: flex;
+    gap: 2px;
+    background: var(--border-e);
+    margin-top: 24px;
+  }
+
+  .earth-stat {
+    background: var(--bg2);
+    padding: 18px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .earth-stat-val {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--earth);
+    display: block;
+  }
+
+  .earth-stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ENERGY LOOP */
+  .loop-box {
+    border: 1px solid var(--border);
+    background: var(--green-glow);
+    padding: 50px 40px;
+    margin: 40px 0;
+    text-align: center;
+  }
+
+  .loop-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 30px;
+    font-style: italic;
+  }
+
+  .loop-steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+  }
+
+  .loop-step {
+    padding: 16px 16px;
+    text-align: center;
+  }
+
+  .loop-step-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+
+  .loop-step-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  .loop-arrow {
+    color: var(--green-dim);
+    font-size: 20px;
+    padding: 0 4px;
+  }
+
+  /* SPEC TABLE */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    margin: 30px 0;
+  }
+
+  .spec-table th {
+    background: var(--bg3);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec-table td {
+    padding: 13px 18px;
+    border-bottom: 1px solid rgba(0,200,117,0.06);
+    color: var(--text-dim);
+  }
+
+  .spec-table td:first-child {
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  .spec-table tr:last-child td { border-bottom: none; }
+  .spec-table tr:hover td { background: rgba(0,200,117,0.04); }
+
+  /* INVENTOR */
+  .inventor-box {
+    border: 1px solid var(--border);
+    background: var(--green-glow);
+    padding: 50px 40px;
+    text-align: center;
+    margin: 40px 0;
+  }
+
+  .inventor-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .inventor-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .inventor-box p {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .contact-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--green-dim);
+    padding-bottom: 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+
+  .footer-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .footer-outputs {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--green-dim);
+    text-transform: uppercase;
+  }
+
+  .footer-copy {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    opacity: 0.4;
+    margin-top: 16px;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .mode-boxes { grid-template-columns: 1fr; }
+    .wall-layer { grid-template-columns: 80px 1fr; }
+    .loop-arrow { display: none; }
+  }
+
+  p { margin-bottom: 16px; }
+  p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- HOME SVG -->
+  <svg class="home-svg" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sun -->
+    <circle cx="130" cy="18" r="10" fill="#e8a030" opacity="0.8"/>
+    <circle cx="130" cy="18" r="15" fill="none" stroke="#e8a030" stroke-width="0.5" opacity="0.3"/>
+    <!-- Sun rays -->
+    <line x1="130" y1="4" x2="130" y2="0" stroke="#e8a030" stroke-width="1" opacity="0.4"/>
+    <line x1="144" y1="8" x2="148" y2="5" stroke="#e8a030" stroke-width="1" opacity="0.4"/>
+    <line x1="116" y1="8" x2="112" y2="5" stroke="#e8a030" stroke-width="1" opacity="0.4"/>
+    <!-- Roof -->
+    <polygon points="80,20 20,65 140,65" fill="none" stroke="#00c875" stroke-width="1.5" opacity="0.9"/>
+    <polygon points="80,20 22,65 138,65" fill="rgba(0,200,117,0.05)"/>
+    <!-- Solar panels on roof -->
+    <line x1="45" y1="50" x2="75" y2="33" stroke="#e8a030" stroke-width="1" opacity="0.5"/>
+    <line x1="55" y1="57" x2="85" y2="40" stroke="#e8a030" stroke-width="1" opacity="0.5"/>
+    <line x1="65" y1="43" x2="95" y2="48" stroke="#e8a030" stroke-width="0.8" opacity="0.3"/>
+    <!-- House walls -->
+    <rect x="30" y="65" width="100" height="55" fill="none" stroke="#00c875" stroke-width="1.5" opacity="0.8"/>
+    <rect x="30" y="65" width="100" height="55" fill="rgba(0,200,117,0.04)"/>
+    <!-- Wall layers hint -->
+    <rect x="30" y="65" width="6" height="55" fill="rgba(232,160,48,0.15)"/>
+    <rect x="154" y="65" width="6" height="55" fill="rgba(232,160,48,0.15)" transform="translate(-130,0)"/>
+    <!-- Door -->
+    <rect x="67" y="90" width="26" height="30" fill="none" stroke="#8a6a3a" stroke-width="1" opacity="0.7"/>
+    <!-- Windows -->
+    <rect x="38" y="75" width="20" height="16" fill="none" stroke="#4ab8d4" stroke-width="1" opacity="0.7"/>
+    <rect x="102" y="75" width="20" height="16" fill="none" stroke="#4ab8d4" stroke-width="1" opacity="0.7"/>
+    <!-- Ground -->
+    <line x1="10" y1="120" x2="150" y2="120" stroke="#8a6a3a" stroke-width="1" opacity="0.5"/>
+    <!-- Underground pipes -->
+    <path d="M 45 120 Q 45 134 80 134 Q 115 134 115 120" fill="none" stroke="#8a6a3a" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+    <!-- Airflow arrows -->
+    <path d="M 25 90 L 30 90" stroke="#4ab8d4" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.6"/>
+    <path d="M 80 62 L 80 55" stroke="#00c875" stroke-width="1.5" opacity="0.6"/>
+    <!-- Earth temp label -->
+    <text x="80" y="138" text-anchor="middle" font-size="7" fill="#8a6a3a" opacity="0.6" font-family="monospace">10–15°C STABLE</text>
+  </svg>
+
+  <div class="hero-byline">✦ &nbsp; An Original Design by M.J. Azzopardi &nbsp; ✦</div>
+  <h1>The <em>Azzopardi</em><br>Adaptive Climate System</h1>
+  <div class="hero-sub"><span>Self-Regulating</span> · <span>Intelligent</span> · <span>Natural</span></div>
+
+  <div class="hero-intro">
+    A home that thinks for itself. The Azzopardi Adaptive Climate System is a self-regulating living structure that stays warm in winter and cool in summer — naturally and intelligently. No wasted energy. No constant bills. Just a home that works with the Earth.
+  </div>
+
+  <div class="modes">
+    <div class="mode hot">
+      <span class="mode-icon">🔥</span>
+      <span class="mode-name">Hot Day Mode</span>
+      <span class="mode-desc">REFLECTS SUNLIGHT<br>PULLS COOL AIR FROM GROUND<br>VENTS HOT AIR OUT</span>
+    </div>
+    <div class="mode cold">
+      <span class="mode-icon">❄️</span>
+      <span class="mode-name">Cold Day Mode</span>
+      <span class="mode-desc">ABSORBS SUNLIGHT<br>STORES HEAT IN WALLS<br>CIRCULATES WARM AIR</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">↓ &nbsp; DESCEND &nbsp; ↓</div>
+  <div class="hero-bottom"></div>
+</section>
+
+<hr class="divider">
+
+<!-- THERMAL SKIN -->
+<div class="section">
+  <div class="section-tag">// 01 — Structure</div>
+  <h2 class="section-title">The <span>Thermal Skin</span><br><em>Wall System</em></h2>
+
+  <p style="font-size:17px; color:var(--text-dim); margin-bottom:10px; line-height:1.9;">The walls are not walls — they are a three-layer climate system, built like the Earth's own atmosphere. Each layer has a specific job. Together they regulate temperature passively, before the intelligent systems even need to activate.</p>
+
+  <div class="wall-layers">
+    <div class="wall-layer">
+      <div class="layer-label outer">Outer<br>Shield</div>
+      <div class="layer-content">
+        <div class="layer-title outer">Outer Layer — The Shield</div>
+        <p>Reflective ceramic or light metal coating. Bounces away solar heat in summer. Protects against wind and rain year round. First line of defence against the outside world.</p>
+      </div>
+    </div>
+    <div class="wall-layer">
+      <div class="layer-label middle">Thermal<br>Mass</div>
+      <div class="layer-content">
+        <div class="layer-title middle">Middle Layer — The Store</div>
+        <p>Stone, concrete, or phase-change materials. Absorbs heat slowly during the day and releases it slowly at night. Acts as a natural battery for warmth — charging when the sun shines, discharging when it doesn't.</p>
+      </div>
+    </div>
+    <div class="wall-layer">
+      <div class="layer-label inner">Comfort<br>Layer</div>
+      <div class="layer-content">
+        <div class="layer-title inner">Inner Layer — The Comfort Zone</div>
+        <p>Insulated panels that keep the interior temperature stable regardless of what the outer layers are doing. The buffer between the active climate management and the living space.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- EARTH COUPLING -->
+<div class="section">
+  <div class="section-tag">// 02 — Earth Coupling</div>
+  <h2 class="section-title">The <span>Earth</span><br><em>as Climate Control</em></h2>
+
+  <div class="earth-box">
+    <div class="earth-box-title">Underground Temperature Regulation</div>
+    <p>Pipes and channels run beneath the house through the ground. The Earth maintains a stable temperature at depth regardless of the season above. In the UK that means roughly 10–15°C year round.</p>
+    <p>In summer, hot air passes through the underground pipes, cools to ground temperature, and returns inside refreshed. In winter, cold incoming air passes through the same pipes, warms to ground temperature, and enters the home already heated. The Earth does the work for free.</p>
+    <div class="earth-stats">
+      <div class="earth-stat">
+        <span class="earth-stat-val">10–15°C</span>
+        <span class="earth-stat-label">Ground Temp UK</span>
+      </div>
+      <div class="earth-stat">
+        <span class="earth-stat-val">Year Round</span>
+        <span class="earth-stat-label">Stable — All Seasons</span>
+      </div>
+      <div class="earth-stat">
+        <span class="earth-stat-val">Zero Cost</span>
+        <span class="earth-stat-label">No Energy Required</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SYSTEMS -->
+<div class="section">
+  <div class="section-tag">// 03 — Core Systems</div>
+  <h2 class="section-title">Four <span>Systems</span><br><em>Working as One</em></h2>
+
+  <div class="sys-grid">
+    <div class="sys-card">
+      <span class="sys-icon">🌬️</span>
+      <div class="sys-title green">Airflow System</div>
+      <p>Hidden vent channels run through walls and floors. In hot weather they pull cool air in from the ground-level shaded side and push hot air out through roof vents. In cold weather they trap warm air inside and circulate it evenly through every room.</p>
+      <p>All vents open and close automatically based on sensor readings — no manual adjustment needed.</p>
+    </div>
+    <div class="sys-card">
+      <span class="sys-icon">🏠</span>
+      <div class="sys-title earth">Roof System</div>
+      <p>A dual-function roof with two active layers. The solar layer generates electricity continuously. The thermal capture layer absorbs heat when the home needs it in winter and switches to a reflective mode in summer to bounce excess heat away.</p>
+      <p>The roof is both power station and climate shield depending on what the home needs at any given moment.</p>
+    </div>
+    <div class="sys-card">
+      <span class="sys-icon">🪟</span>
+      <div class="sys-title sky">Smart Windows</div>
+      <p>Adaptive glass that darkens automatically in strong sunlight to prevent overheating, and clears in low light to maximise warmth and natural light. Reduces solar heat gain in summer while retaining warmth in winter — without ever blocking the view.</p>
+    </div>
+    <div class="sys-card">
+      <span class="sys-icon">🧠</span>
+      <div class="sys-title amber">Climate Core AI</div>
+      <p>The brain of the system. Sensors throughout the home read inside temperature, outside temperature, sun intensity and humidity continuously. The Climate Core uses that data to manage airflow vents, heat storage, solar routing and temperature zones in real time.</p>
+      <p>The home adapts before you feel it change.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- MODES -->
+<div class="section">
+  <div class="section-tag">// 04 — Automatic Modes</div>
+  <h2 class="section-title">How It <span>Adapts</span><br><em>Automatically</em></h2>
+
+  <div class="mode-boxes">
+    <div class="mode-box hot">
+      <div class="mode-box-title">🔥 Hot Day</div>
+      <div class="mode-step"><span class="mode-step-icon">☀️</span> Outer shell switches to reflective mode — sunlight bounced away</div>
+      <div class="mode-step"><span class="mode-step-icon">🌍</span> Underground pipes pull cool ground-temperature air into the home</div>
+      <div class="mode-step"><span class="mode-step-icon">💨</span> Roof vents open — hot air rises and escapes naturally</div>
+      <div class="mode-step"><span class="mode-step-icon">🪟</span> Windows tint automatically to block solar heat gain</div>
+      <div class="mode-step"><span class="mode-step-icon">🌬️</span> Floor vents open on shaded side — cool air drawn in at ground level</div>
+    </div>
+    <div class="mode-box cold">
+      <div class="mode-box-title">❄️ Cold Day</div>
+      <div class="mode-step"><span class="mode-step-icon">☀️</span> Outer shell switches to absorbing mode — solar heat drawn in</div>
+      <div class="mode-step"><span class="mode-step-icon">🧱</span> Thermal mass walls store heat during daylight hours</div>
+      <div class="mode-step"><span class="mode-step-icon">🌙</span> Walls release stored heat slowly through the night</div>
+      <div class="mode-step"><span class="mode-step-icon">🌬️</span> Vents close and circulate warm air evenly through every room</div>
+      <div class="mode-step"><span class="mode-step-icon">🌍</span> Incoming cold air warmed by underground pipes before entering</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ENERGY LOOP -->
+<div class="section">
+  <div class="section-tag">// 05 — Energy Loop</div>
+  <h2 class="section-title">The <span>Self-Sustaining</span><br><em>Energy Loop</em></h2>
+
+  <div class="loop-box">
+    <div class="loop-title">Nothing Wasted</div>
+    <div class="loop-steps">
+      <div class="loop-step">
+        <span class="loop-step-icon">☀️</span>
+        <div class="loop-step-text">SUN HITS<br>THE HOME</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <span class="loop-step-icon">⚡</span>
+        <div class="loop-step-text">SOLAR PANELS<br>GENERATE POWER</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <span class="loop-step-icon">🧱</span>
+        <div class="loop-step-text">HEAT STORED<br>IN WALLS + FLOORS</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <span class="loop-step-icon">🔋</span>
+        <div class="loop-step-text">SURPLUS TO<br>HOME BATTERY</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <span class="loop-step-icon">🌙</span>
+        <div class="loop-step-text">BATTERY + WALLS<br>POWER THE NIGHT</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <span class="loop-step-icon">🔄</span>
+        <div class="loop-step-text">CYCLE<br>REPEATS</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SPECS -->
+<div class="section">
+  <div class="section-tag">// 06 — What You Need to Build It</div>
+  <h2 class="section-title">Build <span>Requirements</span></h2>
+
+  <table class="spec-table">
+    <tr><th>Component</th><th>Specification</th></tr>
+    <tr><td>Walls</td><td>Insulated concrete or thermal blocks — three-layer construction</td></tr>
+    <tr><td>Outer Coating</td><td>Reflective ceramic or light metal — switchable absorption/reflection</td></tr>
+    <tr><td>Roof</td><td>Solar panel layer + thermal capture layer — dual function</td></tr>
+    <tr><td>Windows</td><td>Smart adaptive glass — auto-tinting</td></tr>
+    <tr><td>Underground System</td><td>Buried pipe network beneath foundation — ground-source air exchange</td></tr>
+    <tr><td>Vent System</td><td>Hidden channels in walls and floors with automated motor-driven vents</td></tr>
+    <tr><td>Water Cooling Loop</td><td>Optional — water circulated through walls for heat redistribution</td></tr>
+    <tr><td>Green Roof / Living Walls</td><td>Optional — natural insulation and air quality improvement</td></tr>
+    <tr><td>Control Brain</td><td>Arduino or custom microcontroller with temperature, humidity and solar sensors</td></tr>
+    <tr><td>Energy Storage</td><td>Home battery system — stores solar for night operation</td></tr>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- INVENTOR -->
+<div class="section">
+  <div class="section-tag">// The Designer</div>
+  <div class="inventor-box">
+    <div class="inventor-name">M.J. Azzopardi</div>
+    <div class="inventor-title">Philosopher · Inventor · Designer</div>
+    <p>The Azzopardi Adaptive Climate System is part of a wider body of original work including the Azzopardi Tower planetary resource infrastructure, heart resonance research, and a Theory of Everything connecting the soul, the Sun, and the Earth as unified living systems.</p>
+    <p>All designs originated independently and are documented and timestamped on public record.</p>
+    <a href="mailto:mr.m.j.azzopardi@gmail.com" class="contact-link">mr.m.j.azzopardi@gmail.com</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">The Azzopardi Adaptive Climate System</div>
+  <div class="footer-sub">Original Design — M.J. Azzopardi — 2026</div>
+  <div class="footer-outputs">Warm in Winter · Cool in Summer · Powered by Earth</div>
+  <div class="footer-copy">Part of the Apex Ecosystem · Theory of Everything</div>
+</footer>
+
+</body>
+</html>
